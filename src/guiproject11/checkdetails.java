@@ -3,6 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package guiproject11;
+
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -15,6 +26,24 @@ public class checkdetails extends javax.swing.JFrame {
      */
     public checkdetails() {
         initComponents();
+    }
+    
+    Connection con = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+    
+    
+    public void Connect() throws SQLException
+    {
+    	try
+    	{
+    		Class.forName("com.mysql.cj.jdbc.Driver");
+    		con = DriverManager.getConnection("jdbc:mysql://localhost:3306/credit_bank?autoReconnect=true&useSSL=false","root","root");
+    	}
+    	catch (ClassNotFoundException ex)
+    	{
+    		Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE,null,ex);
+    	}
     }
 
     /**
@@ -30,6 +59,13 @@ public class checkdetails extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
+        jButton1.addActionListener(new ActionListener() {
+        	public void actionPerformed(java.awt.event.ActionEvent evt) {
+        		jButton1ActionPerformed(evt);
+        	}
+        });
+        
+        
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocation(new java.awt.Point(280, 150));
         setUndecorated(true);
@@ -47,7 +83,7 @@ public class checkdetails extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Name", "ID", "Aadhar No.", "Semester", "12th Roll No.", "Branch", "Phone No."
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -80,6 +116,12 @@ public class checkdetails extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)
+    {
+    	
+    	new checkdetails().setVisible(false);
+    }
+    
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // TODO add your handling code here:
         try{

@@ -6,11 +6,16 @@
 package guiproject11;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
-import com.jdbc.main.JDBCMySQLConnector;
+//import com.jdbc.main.JDBCMySQLConnector;
 /**
  *
  * @author Dr. Milind
@@ -20,12 +25,30 @@ public class firstform extends javax.swing.JFrame {
     /**
      * Creates new form firstform
      */
-	Connection connection = null;
     public firstform() {
         initComponents();
-        connection = JDBCMySQLConnector.dbconnect();
     }
 
+    
+    
+    Connection con = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+    
+    public void Connect() throws SQLException
+    {
+    	try
+    	{
+    		Class.forName("com.mysql.cj.jdbc.Driver");
+    		con = DriverManager.getConnection("jdbc:mysql://localhost:3306/credit_bank?autoReconnect=true&useSSL=false","root","root");
+    	}
+    	catch (ClassNotFoundException ex)
+    	{
+    		Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE,null,ex);
+    	}
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

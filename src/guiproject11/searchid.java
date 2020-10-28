@@ -3,11 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package guiproject11;
 
-/**
- *
- * @author Dr. Milind
- */
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import com.mysql.cj.jdbc.Driver;
+//import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 public class searchid extends javax.swing.JFrame {
 
     /**
@@ -15,6 +28,23 @@ public class searchid extends javax.swing.JFrame {
      */
     public searchid() {
         initComponents();
+    }
+    
+    Connection con = null;
+    Statement pst = null;
+    ResultSet rs = null;
+    
+    public void Connect() throws SQLException
+    {
+    	try
+    	{
+    		Class.forName("com.mysql.cj.jdbc.Driver");
+    		con = DriverManager.getConnection("jdbc:mysql://localhost:3306/credit_bank?autoReconnect=true&useSSL=false","root","root");
+    	}
+    	catch (ClassNotFoundException ex)
+    	{
+    		Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE,null,ex);
+    	}
     }
 
     /**
@@ -28,16 +58,36 @@ public class searchid extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        checkDetail = new javax.swing.JButton();
+        updateCredit = new javax.swing.JButton();
 
+        checkDetail.addActionListener(new ActionListener() {
+        	public void actionPerformed(java.awt.event.ActionEvent evt) {
+        		checkDetailActionPerformed(evt);
+        	}
+
+        });
+        
+        updateCredit.addActionListener(new ActionListener() {
+        	public void actionPerformed(java.awt.event.ActionEvent evt) {
+        		updateCreditActionPerformed(evt);
+        	}
+
+			private void updateCreditActionPerformed(ActionEvent evt) {
+				 //TODO Auto-generated method stub
+				
+			}
+        });
+        
+
+        
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("STUDENT ID : ");
 
-        jButton1.setText("CHECK DETAILS");
+        checkDetail.setText("CHECK DETAILS");
 
-        jButton2.setText("UPDATE CREDIT");
+        updateCredit.setText("UPDATE CREDIT");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -51,8 +101,8 @@ public class searchid extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jButton2)
-                        .addComponent(jButton1)))
+                        .addComponent(updateCredit)
+                        .addComponent(checkDetail)))
                 .addContainerGap(89, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -63,15 +113,55 @@ public class searchid extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(34, 34, 34)
-                .addComponent(jButton1)
+                .addComponent(checkDetail)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(updateCredit)
                 .addContainerGap(97, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void checkDetailActionPerformed(java.awt.event.ActionEvent evt){
+    	// TODO Auto-generated method stub
+    	
+    	try {
+    		boolean flag = false;
+    		Connect();
+    		String s1 = jTextField1.getText();
+    		int i1 = Integer.parseInt(s1);
+    		String query = "SELECT * FROM STUDENTINFORMATION";
+    		checkdetails cd = new checkdetails();
+    		
+    		pst = con.prepareStatement(query);
+    		ResultSet rs = pst.executeQuery(query);
+//    		DefaultTableModel tm = (DefaultTableModel)jTable1.getModel();
+    		while(rs.next())
+    		{
+    			if(rs.getString(2).equals(s1))
+    			{
+    				flag = true;
+    				break;
+    			}
+    		}
+    		
+    		if(flag)
+    		{
+    			JOptionPane.showMessageDialog(rootPane, "You Succesfully Loggedin");
+    			new searchid().setVisible(false);
+    			cd.setVisible(true);
+    		}
+    		else
+    			JOptionPane.showMessageDialog(rootPane, "Login Failed");
+    		
+//    		pst = con.prepareStatement(query);
+//    		pst.executeQuery();
+    	}
+    	catch(Exception ex) {
+    		ex.printStackTrace();
+    	}
+    	
+    } 
     /**
      * @param args the command line arguments
      */
@@ -108,8 +198,8 @@ public class searchid extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton checkDetail;
+    private javax.swing.JButton updateCredit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables

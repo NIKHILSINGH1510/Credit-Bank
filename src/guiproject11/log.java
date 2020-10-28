@@ -1,5 +1,8 @@
-
+package guiproject11;
 import javax.swing.JOptionPane;
+
+import java.awt.event.ActionListener;
+
 public class log extends javax.swing.JFrame {
 
     public log() {
@@ -90,7 +93,7 @@ public class log extends javax.swing.JFrame {
 if(tnam.getText().equals("admin") && tpas.getText().equals("123"))
 {
 new searchid().setVisible(true);
-// JOptionPane.showMessageDialog(this,"welcome");
+ JOptionPane.showMessageDialog(this,"welcome");
 }
 else{
     JOptionPane.showMessageDialog(this,"login failed");
